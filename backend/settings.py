@@ -20,12 +20,12 @@ class Settings(BaseSettings):
     refresh_token_expire_days: int = 7             # Long-lived refresh token
 
     # ── Database ───────────────────────────────────────────────────────────────
-    database_url: str = "postgresql://postgres:password@localhost:5432/rehabswat"
+    database_url: str = "sqlite:///./rehab_swat.db"
 
     # ── CORS ───────────────────────────────────────────────────────────────────
     # Stored as a comma-separated string from environment, e.g.:
     #   CORS_ALLOWED_ORIGINS="http://localhost:5173,https://app.rehabswat.pk"
-    cors_allowed_origins: str = "http://localhost:5173"
+    cors_allowed_origins: str = "http://localhost:5173,http://localhost:8000,http://127.0.0.1:8000"
 
     # ── Redis (for rate limiting + future Celery) ──────────────────────────────
     redis_url: str = "redis://localhost:6379/0"

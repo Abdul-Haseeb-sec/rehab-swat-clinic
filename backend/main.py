@@ -114,7 +114,8 @@ def health_check(db: Session = Depends(get_db)):
     except Exception:
         pass
 
-    if db_status == "connected" and redis_status == "connected":
+    is_sqlite = settings.database_url.startswith("sqlite")
+    if db_status == "connected" and (redis_status == "connected" or is_sqlite):
         status_str = "ok"
     else:
         status_str = "error"
@@ -1513,6 +1514,6 @@ if __name__ == "__main__":
     # Packaged execution
     print("[RehabSwat] Starting Clinic Management System Desktop Server...")
     print("[RehabSwat] Access local app at: http://localhost:8000")
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=False)
+    uvicorn.run(app, host="127.0.0.1", port=8000)
 
 
