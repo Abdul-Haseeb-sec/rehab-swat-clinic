@@ -1,0 +1,43 @@
+# Rehab Swat CMS — Phase 3 (EMR) Complete
+
+Phase 3 is now fully implemented, focusing on **Electronic Medical Records (EMR)**, including SOAP Notes, Vitals tracking, Diagnosis Codes, and Treatment Plans.
+
+---
+
+## 📸 Completed Implementation
+
+````carousel
+![The new SOAP Note modal where doctors enter clinical notes, vitals, and treatment plans.](C:/Users/Shadow/.gemini/antigravity/brain/8487ee09-9137-4ec4-8de0-de8a19a63cc4/.system_generated/click_feedback/click_feedback_1779204093956.png)
+````
+
+## ✅ What Was Achieved
+
+### 1. Medical Records Database 💾
+- Added `MedicalRecord` model linked to Patients, Doctors, and optionally Appointments.
+- Automatically stores and tracks timestamps for auditing purposes.
+
+### 2. Clinical Notes (SOAP) Interface 📝
+- Added a dedicated **"Clinical Notes (EMR)"** tab to the Patient Profile.
+- Created a beautiful, glassmorphic modal for Doctors to input session data without navigating away.
+
+### 3. Comprehensive Data Capture 🩺
+The new form tracks:
+- **Vitals**: Blood Pressure, Pulse, Temperature, Weight, and SpO2.
+- **SOAP**:
+  - **S**ubjective: Patient complaints.
+  - **O**bjective: Clinical observations & ROM tests.
+  - **A**ssessment: Diagnosis and clinical opinions.
+  - **P**lan: Treatment protocols and home exercises.
+- **Diagnosis Codes**: Support for multiple comma-separated ICD-10 or custom billing codes.
+
+### 4. Interactive Timeline ⏱️
+- Medical records render as a vertical timeline in the Patient Profile, making it extremely easy to scroll through a patient's historical progression and previous treatment plans.
+- Badges automatically highlight recorded vitals and diagnosis codes.
+
+---
+
+> [!TIP]
+> You can try creating a Clinical Note yourself by opening a patient profile and clicking **+ New Clinical Note**!
+
+## 🚀 Ready for Phase 4?
+We've completed the EMR! The natural next step (Phase 4) is usually **Billing & Invoicing**, or we can build the **Prescription Manager (PDFs)**. Let me know what you'd like to tackle next!

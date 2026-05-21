@@ -1,0 +1,50 @@
+# ── Rehab Swat CMS — FastAPI Backend Dockerfile ───────────────────────────────
+# Multi-stage build — keeps the final image lean (~200MB vs ~1GB dev image)
+
+# ── Stage 1: Dependency builder ───────────────────────────────────────────────
+FROM python:3.11-slim AS builder
+
+WORKDIR /build
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies into /build/wheels
+COPY backend/requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt --target=/build/site-packages
+
+
+# ── Stage 2: Runtime image ────────────────────────────────────────────────────
+FROM python:3.11-slim AS runtime
+
+# Install only libpq runtime (needed by psycopg) and curl for health check
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libpq5 \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create non-root user for security
+RUN groupadd -r rehabswat && useradd -r -g rehabswat rehabswat
+
+WORKDIR /app
+
+# Copy installed packages from builder
+COPY --from=builder /build/site-packages /usr/local/lib/python3.11/site-packages/
+
+# Copy application source
+COPY backend/ .
+
+# Ensure the non-root user owns the app directory
+RUN chown -R rehabswat:rehabswat /app
+
+USER rehabswat
+
+# Expose port
+EXPOSE 8000
+
+# Startup: run Alembic migrations, then start the server
+CMD ["sh", "-c", "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000 --workers 2"]

@@ -1,0 +1,59 @@
+# ── Python / Backend ─────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+*,cover
+.hypothesis/
+.pytest_cache/
+
+# SQLite databases (local dev state)
+*.db
+backend/rehab_swat.db
+backend/check.db
+backend/test_phase5.db
+
+# ── Frontend ─────────────────────────────────────────────────────────────────
+node_modules/
+frontend/node_modules/
+frontend/dist/
+
+# ── Build Artifacts & Packaging ──────────────────────────────────────────────
+build/
+backend/build/
+backend/dist/RehabSwatClinic.exe
+*.spec
+backend/*.spec
+*.exe
+
+# ── Environment & Secrets ────────────────────────────────────────────────────
+.env
+backend/.env
+.env*.local
+
+# ── Logs & Temporary ─────────────────────────────────────────────────────────
+*.log
+backend/*.log
+scripts/*.log
+.DS_Store
+Thumbs.db
+
+# ── IDEs & Editors ───────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
