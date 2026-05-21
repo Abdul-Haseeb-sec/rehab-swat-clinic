@@ -1510,10 +1510,37 @@ if os.path.exists(dist_path):
 if __name__ == "__main__":
     import uvicorn
     import sys
+    import socket
+    import webbrowser
+    from threading import Timer
+
+    def is_port_in_use(port: int) -> bool:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            return s.connect_ex(('127.0.0.1', port)) == 0
+
+    def find_free_port(start_port: int = 8000, max_attempts: int = 100) -> int:
+        for port in range(start_port, start_port + max_attempts):
+            if not is_port_in_use(port):
+                return port
+        s = socket.socket()
+        s.bind(('', 0))
+        port = s.getsockname()[1]
+        s.close()
+        return port
+
+    def open_browser(port: int):
+        print(f"[RehabSwat] Launching default web browser...")
+        webbrowser.open(f"http://localhost:{port}")
+
+    # Determine free port
+    port = find_free_port(8000)
+    
+    # Start a timer to open the browser shortly after the server starts
+    Timer(1.5, open_browser, args=[port]).start()
     
     # Packaged execution
     print("[RehabSwat] Starting Clinic Management System Desktop Server...")
-    print("[RehabSwat] Access local app at: http://localhost:8000")
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    print(f"[RehabSwat] Access local app at: http://localhost:{port}")
+    uvicorn.run(app, host="127.0.0.1", port=port)
 
 

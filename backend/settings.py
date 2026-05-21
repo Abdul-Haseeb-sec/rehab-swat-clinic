@@ -59,7 +59,26 @@ class Settings(BaseSettings):
 def get_settings() -> Settings:
     """Cached settings singleton — only reads .env once."""
     import secrets
+    import sys
+    import os
     s = Settings()
+    
+    # Resolve relative SQLite database URL to an absolute path next to executable or script
+    if s.database_url.startswith("sqlite:///"):
+        db_path = s.database_url.replace("sqlite:///", "")
+        # If it doesn't contain a colon (like C:) and doesn't start with a slash or backslash, it is relative
+        if ":" not in db_path and not db_path.startswith("/") and not db_path.startswith("\\"):
+            if db_path.startswith("./"):
+                db_path = db_path[2:]
+            elif db_path.startswith(".\\"):
+                db_path = db_path[2:]
+                
+            if getattr(sys, 'frozen', False):
+                base_dir = os.path.dirname(os.path.abspath(sys.executable))
+            else:
+                base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            s.database_url = f"sqlite:///{os.path.join(base_dir, db_path)}"
+            
     if not s.jwt_secret_key:
         s.jwt_secret_key = secrets.token_hex(32)
     return s
