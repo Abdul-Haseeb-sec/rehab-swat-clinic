@@ -340,6 +340,11 @@ def health_check():
 
 @app.get("/")
 def read_root():
+    import os
+    dist_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dist")
+    if os.path.exists(dist_path):
+        from fastapi.responses import FileResponse
+        return FileResponse(os.path.join(dist_path, "index.html"))
     return {"status": "ok", "message": "Rehab Swat CMS API v2.0.0"}
 
 
@@ -1529,7 +1534,7 @@ if __name__ == "__main__":
         return port
 
     def open_browser(port: int):
-        print(f"[RehabSwat] Launching default web browser...")
+        print(f"[RehabSwat] Launching default web browser...", flush=True)
         webbrowser.open(f"http://localhost:{port}")
 
     # Determine free port
@@ -1539,8 +1544,8 @@ if __name__ == "__main__":
     Timer(1.5, open_browser, args=[port]).start()
     
     # Packaged execution
-    print("[RehabSwat] Starting Clinic Management System Desktop Server...")
-    print(f"[RehabSwat] Access local app at: http://localhost:{port}")
+    print("[RehabSwat] Starting Clinic Management System Desktop Server...", flush=True)
+    print(f"[RehabSwat] Access local app at: http://localhost:{port}", flush=True)
     uvicorn.run(app, host="127.0.0.1", port=port)
 
 
